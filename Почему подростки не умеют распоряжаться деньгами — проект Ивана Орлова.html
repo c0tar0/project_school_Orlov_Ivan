@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="description" content="Индивидуальный проект Ивана Орлова: почему подростки не умеют распоряжаться финансами и как это исправить. Калькуляторы, тесты и данные опросов.">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Почему подростки не умеют распоряжаться деньгами — проект Ивана Орлова</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Onest:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f1f0e4;--surf:#fbfaf2;--ink:#10241b;--mute:#4a5d52;--teal:#0b3b2a;--amber:#d9a521;--coral:#a8262f;--line:#cfd3bd;--on-teal:#f1f0e4;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#07140e;--surf:#0e2218;--ink:#ece9d6;--mute:#9bb3a2;--teal:#06261a;--line:#244233;--on-teal:#ece9d6;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#07140e;--surf:#0e2218;--ink:#ece9d6;--mute:#9bb3a2;--teal:#06261a;--line:#244233;--on-teal:#ece9d6;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.65 Onest,system-ui,sans-serif}
+h1,h2,h3{font-family:Unbounded,Onest,sans-serif;line-height:1.15;margin:0 0 .6em}
+h2{font-size:clamp(1.6rem,4vw,2.4rem);font-weight:700}
+h3{font-size:1.05rem;font-weight:500}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+section{padding:72px 0}
+.lead{color:var(--mute);max-width:62ch}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;gap:18px;overflow-x:auto;padding-top:12px;padding-bottom:12px;font-size:.92rem;white-space:nowrap}
+nav a{text-decoration:none;color:var(--mute)}nav a:hover{color:var(--ink)}
+.hero{background:var(--teal);color:var(--on-teal);padding:64px 0 72px}
+.hero .wrap{display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:center}
+.hero h1{font-size:clamp(1.7rem,4.4vw,2.9rem);font-weight:700}
+.hero p{color:#c3d6cf;max-width:48ch}
+.meta{margin-top:28px;display:grid;gap:2px;font-size:.95rem;color:#c3d6cf}
+.meta b{color:var(--on-teal);font-weight:600}
+.jar{background:#06261a;border:1px solid rgba(217,165,33,.5);border-radius:22px;padding:22px}
+.jar label{display:block;font-size:.9rem;color:#c3d6cf}
+.jar output{font-family:Unbounded;color:var(--amber)}
+input[type=range]{width:100%;accent-color:var(--amber);margin:6px 0 14px}
+.big{font-family:Unbounded;font-size:clamp(1.6rem,4vw,2.3rem);font-weight:700;color:var(--amber)}
+svg.chart{width:100%;height:auto;display:block}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}
+.card{background:var(--surf);border:1px solid var(--line);border-radius:14px;padding:22px}
+.card p{margin:0;color:var(--mute);font-size:.96rem}
+.stat{font-family:Unbounded;font-size:1.5rem;color:var(--coral);margin-bottom:6px;display:block}
+.tool{background:var(--surf);border:1px solid var(--line);border-radius:18px;padding:26px;margin-top:26px}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:22px}
+input[type=number]{width:100%;font:inherit;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+.bar{display:flex;height:46px;border-radius:12px;overflow:hidden;margin:14px 0;font-size:.85rem;font-weight:600;color:#14211f}
+.bar div{display:flex;align-items:center;justify-content:center;transition:flex-grow .3s}
+.n{background:#d9a521}.w{background:#c9505a}.s{background:#7fd1a0}
+.legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;color:var(--mute);font-size:.95rem}
+.legend b{color:var(--ink);font-family:Unbounded;font-weight:500;display:block}
+.q{font-weight:600;margin:0 0 14px}
+.opts{display:grid;gap:10px}
+.opts button,.btn{font:inherit;text-align:left;padding:12px 16px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.opts button:hover{border-color:var(--teal)}
+.opts button.ok{background:#bfe8d4;border-color:#2e8f66;color:#0d2b1f}
+.opts button.bad{background:#f7c9bd;border-color:var(--coral);color:#3a1208}
+.btn{background:var(--teal);color:var(--on-teal);border-color:var(--teal);text-align:center;margin-top:16px}
+.exp{margin:14px 0 0;color:var(--mute);min-height:1.6em;font-size:.95rem}
+.steps{list-style:none;counter-reset:s;padding:0;margin:0;display:grid;gap:14px}
+.steps li{counter-increment:s;display:grid;grid-template-columns:44px 1fr;gap:14px;background:var(--surf);border:1px solid var(--line);border-radius:14px;padding:18px}
+.steps li::before{content:counter(s);font-family:Unbounded;background:var(--amber);color:#14211f;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-weight:700}
+.steps b{display:block}.steps span{color:var(--mute);font-size:.96rem}
+.note{border-left:4px solid var(--amber);padding:6px 16px;color:var(--mute);margin-top:22px;font-size:.92rem}
+footer{background:var(--teal);color:#c3d6cf;padding:40px 0;font-size:.92rem}
+footer h3{color:var(--on-teal)}
+@media (max-width:760px){.hero .wrap{grid-template-columns:1fr}section{padding:52px 0}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+.tg{font:inherit;background:none;border:1px solid var(--line);color:var(--ink);border-radius:50%;width:32px;height:32px;cursor:pointer;margin-left:auto;flex:none}
+#pb{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--amber),var(--coral));z-index:9}
+nav{background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(10px)}
+h2{position:relative;padding-bottom:.45em}
+h2::after{content:"";display:block;width:56px;height:4px;border-radius:2px;background:var(--amber);margin-top:.5em}
+.hero{background:radial-gradient(circle at 85% 15%,#1f7a4f 0,transparent 45%),radial-gradient(circle at 5% 100%,#8a6a10 0,transparent 35%),var(--teal);position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;right:-90px;bottom:-90px;width:320px;height:320px;border-radius:50%;border:34px solid rgba(242,169,0,.18);box-shadow:inset 0 0 0 18px rgba(242,169,0,.1)}
+.hero .wrap{position:relative}
+.hero h1{text-wrap:balance}
+.jar{backdrop-filter:blur(6px);background:rgba(6,38,26,.78);box-shadow:0 24px 60px rgba(0,0,0,.35)}
+.card{transition:transform .2s,border-color .2s,box-shadow .2s}
+.card:hover{transform:translateY(-4px);border-color:var(--amber);box-shadow:0 14px 30px rgba(15,61,62,.15)}
+.hl{border-top:5px solid var(--amber)}
+.tool{box-shadow:0 18px 40px rgba(15,61,62,.08)}
+.myths{display:grid;gap:12px;margin-top:24px;max-width:780px}
+.myths details{background:var(--surf);border:1px solid var(--line);border-radius:14px;padding:16px 20px}
+.myths details[open]{border-color:var(--amber)}
+.myths summary{cursor:pointer;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:12px}
+.myths summary::after{content:"+";color:var(--coral);font-family:Unbounded;font-size:1.3rem;line-height:1}
+.myths details[open] summary::after{content:"−"}
+.myths p{margin:12px 0 0;color:var(--mute)}
+.fin{background:var(--teal);color:var(--on-teal);text-align:center}
+.fin h2::after{margin-left:auto;margin-right:auto}
+.fin p{max-width:60ch;margin:0 auto;color:#c3d6cf}
+.cta{display:inline-block;background:var(--amber);color:#14211f;border-color:var(--amber);font-weight:600;text-decoration:none;margin-top:26px;padding:14px 26px;border-radius:999px}
+.cta:hover{filter:brightness(1.08)}
+.chk{display:grid;gap:12px}.chk label{display:flex;gap:12px;align-items:flex-start;cursor:pointer}
+.ck{width:22px;height:22px;accent-color:var(--teal);flex:none;margin-top:3px}
+.pgs{height:12px;background:var(--line);border-radius:6px;margin-top:22px;overflow:hidden}
+#pgv{height:100%;width:0;background:linear-gradient(90deg,var(--amber),#7fd1b0);transition:width .3s}
+.steps li{transition:border-color .2s}.steps li:hover{border-color:var(--amber)}
+body{background-image:radial-gradient(rgba(11,59,42,.06) 1px,transparent 1px);background-size:18px 18px}
+.hero::after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-radial-gradient(circle at 18% 130%,transparent 0 9px,rgba(227,179,65,.07) 9px 10px)}
+.big{background:linear-gradient(90deg,#f6dc8e,#d9a521 50%,#f6dc8e);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:#e3b341}
+nav{border-bottom:2px solid var(--amber)}
+.hl{border-top-color:var(--amber)}
+.stat{color:var(--coral)}
+.steps li::before{background:linear-gradient(135deg,#f6dc8e,#d9a521);box-shadow:0 0 0 3px rgba(217,165,33,.25)}
+h2::after{background:linear-gradient(90deg,#d9a521,#7fd1a0)}
+.cta{background:linear-gradient(135deg,#f6dc8e,#d9a521);box-shadow:0 8px 24px rgba(217,165,33,.35)}
+#pb{background:linear-gradient(90deg,#d9a521,#2f9e68)}
+h1,h2,h3,.big,.stat,.jar output,.legend b,.steps li::before,.myths summary::after{font-family:'Cormorant Garamond',Georgia,'Times New Roman',serif;font-variant-numeric:lining-nums}
+h1,h2{font-weight:600;letter-spacing:-.01em}
+h2{font-size:clamp(2.1rem,5vw,3.3rem)}
+h3{font-size:1.4rem;font-weight:600}
+.stat{font-size:1.8rem}
+.big{font-size:clamp(2.6rem,5vw,3.6rem)}
+.lead{font-size:1.12rem}
+.wrap{max-width:1100px}
+section{padding:104px 0}
+.hero{padding:88px 0 104px}
+.hero h1{font-size:clamp(2.3rem,5.6vw,4.2rem);line-height:1.05;background:linear-gradient(100deg,var(--on-teal) 40%,#f6dc8e 50%,var(--on-teal) 60%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:sh 2.6s ease .3s 1 both}
+@keyframes sh{from{background-position:100% 0}to{background-position:0 0}}
+nav{background:rgba(6,38,26,.94);border-bottom:1px solid rgba(217,165,33,.6)}
+nav a{color:#c9d9cd}nav a:hover{color:#f0d47c}
+.brand{font:600 1.3rem 'Cormorant Garamond',Georgia,serif;color:#f0d47c;margin-right:10px;flex:none}
+.tg{color:#f0d47c;border-color:rgba(217,165,33,.5)}
+.card,.tool,.steps li,.myths details{border-radius:6px;border:1px solid rgba(184,142,40,.4);box-shadow:0 22px 44px -28px rgba(6,38,26,.45)}
+.card:hover{transform:none;box-shadow:0 26px 52px -22px rgba(6,38,26,.55);border-color:var(--amber)}
+.hl{border-top:2px solid var(--amber)}
+.tool{border-radius:10px;padding:34px}
+.jar{border-radius:10px;outline:1px solid rgba(217,165,33,.28);outline-offset:7px}
+.btn,.opts button{border-radius:4px}
+.bar{border-radius:4px}
+.steps li::before{color:#10241b;font-size:1.6rem;font-weight:700}
+h2::after{height:1px;width:96px;background:linear-gradient(90deg,#d9a521,transparent)}
+.fin{background:radial-gradient(circle at 50% 0,#14604a 0,transparent 60%),var(--teal);border-top:1px solid var(--amber)}
+.fin h2{font-size:clamp(2.4rem,5vw,3.7rem)}
+.fin h2::after{background:linear-gradient(90deg,transparent,#d9a521,transparent)}
+.cta{letter-spacing:.04em;border-radius:2px;color:#10241b}
+footer{border-top:1px solid rgba(217,165,33,.5)}
+@media (max-width:760px){section{padding:64px 0}.hero{padding:56px 0 64px}.tool{padding:22px}}
+@media (prefers-reduced-motion:reduce){.hero h1{animation:none}}
+.tick{background:#06261a;border-bottom:1px solid rgba(217,165,33,.5);overflow:hidden;white-space:nowrap;padding:14px 0;color:#f0d47c;font:600 1.3rem 'Cormorant Garamond',Georgia,serif}
+.tick div{display:inline-block;animation:tk 50s linear infinite}
+.tick span::after{content:"◆";margin:0 28px;font-size:.55em;color:#d9a521;vertical-align:middle}
+@keyframes tk{to{transform:translateX(-50%)}}
+.jar{position:relative}
+.coin{position:absolute;top:-44px;right:-10px;width:92px;height:92px;border-radius:50%;display:grid;place-items:center;font:700 2.8rem/1 'Cormorant Garamond',Georgia,serif;color:#7a5400;background:radial-gradient(circle at 30% 28%,#fff3c2,#f0c64a 40%,#b8861c 78%,#8a6210);box-shadow:inset 0 0 0 5px rgba(255,255,255,.28),inset 0 0 0 9px rgba(122,84,0,.35),0 16px 34px rgba(0,0,0,.5);animation:spin 6s ease-in-out infinite;z-index:2}
+@keyframes spin{0%,100%{transform:perspective(500px) rotateY(-28deg)}50%{transform:perspective(500px) rotateY(28deg)}}
+.acts{display:flex;gap:14px;flex-wrap:wrap;margin-top:30px}.acts .cta{margin-top:0}
+.ghost{display:inline-block;padding:14px 26px;border:1px solid rgba(217,165,33,.6);color:#f0d47c;text-decoration:none;border-radius:2px;letter-spacing:.04em}
+.ghost:hover{background:rgba(217,165,33,.14)}
+.card{position:relative;overflow:hidden}
+.card::after{content:"";position:absolute;inset:0;background:radial-gradient(260px circle at var(--mx,50%) var(--my,50%),rgba(217,165,33,.18),transparent 60%);opacity:0;transition:opacity .3s;pointer-events:none}
+.card:hover::after{opacity:1}
+.rv{opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s ease,border-color .2s,box-shadow .2s}
+.rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.tick div,.coin{animation:none}}
+@media (max-width:760px){.coin{width:68px;height:68px;font-size:2rem;top:-32px}}
+.demo{display:inline-block;background:rgba(168,38,47,.12);color:var(--coral);padding:4px 12px;border-radius:999px;font-size:.85rem;margin:0 0 20px}
+.sq{margin:0 0 30px}.sq b{display:block;margin-bottom:10px}
+.sr{display:grid;grid-template-columns:minmax(120px,230px) 1fr 54px;gap:12px;align-items:center;margin:8px 0;font-size:.95rem}
+.st{height:14px;background:var(--line);border-radius:7px;overflow:hidden}
+.st i{display:block;height:100%;background:linear-gradient(90deg,#b8861c,#f6dc8e);border-radius:7px}
+.sr em{font:700 1.4rem 'Cormorant Garamond',Georgia,serif;font-style:normal;text-align:right}
+.out{font:700 2.8rem/1.1 'Cormorant Garamond',Georgia,serif;color:var(--ink)}
+.res{margin-top:20px;padding:22px;border-left:4px solid var(--amber);background:var(--surf);border-radius:4px}
+.res h3{margin:0 0 8px;font-size:1.8rem}.res p{margin:0 0 10px;color:var(--mute)}
+@media (max-width:560px){.sr{grid-template-columns:1fr 48px}.sr .st{grid-column:1/-1;order:3}}
+.src{font-size:.88rem;color:var(--mute);margin:-4px 0 12px}.src a{color:var(--ink);text-decoration:underline;text-decoration-color:var(--amber);text-underline-offset:3px}
+nav a.act{color:#f0d47c;box-shadow:0 2px 0 #d9a521}
+#tp{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom,0px));width:46px;height:46px;border-radius:50%;border:1px solid rgba(217,165,33,.6);background:#06261a;color:#f0d47c;font-size:1.3rem;cursor:pointer;opacity:0;pointer-events:none;transition:opacity .3s;z-index:8}
+#tp.on{opacity:1;pointer-events:auto}
+main section:nth-of-type(even):not(.fin){background:var(--surf)}
+main section:nth-of-type(even) .card,main section:nth-of-type(even) .tool,main section:nth-of-type(even) .steps li,main section:nth-of-type(even) .myths details{background:var(--bg)}
+.nums{background:var(--teal);color:var(--on-teal);padding:56px 0;border-bottom:1px solid rgba(217,165,33,.5)}
+.nums .wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.num{padding:8px 28px;border-left:1px solid rgba(217,165,33,.4)}
+.num:first-child{border-left:0;padding-left:0}
+.num b{display:block;font:700 clamp(3.4rem,8vw,5.4rem)/1 'Cormorant Garamond',Georgia,serif;background:linear-gradient(180deg,#f6dc8e,#d9a521 70%,#b8861c);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:#e3b341}
+.num b::after{content:"%";font-size:.55em;margin-left:2px}
+.num span{display:block;color:#d6e4da;margin-top:6px;max-width:26ch}
+.num small{display:block;color:#9bb3a2;margin-top:8px;font-size:.85rem}
+@media (max-width:640px){.num{border-left:0;border-top:1px solid rgba(217,165,33,.4);padding:18px 0}.num:first-child{border-top:0}}
+input[type=range]{-webkit-appearance:none;appearance:none;height:6px;border-radius:3px;background:linear-gradient(90deg,#d9a521,#7fd1a0)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#fff3c2,#d9a521);border:2px solid #7a5400;box-shadow:0 3px 8px rgba(0,0,0,.35);cursor:pointer}
+input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#fff3c2,#d9a521);border:2px solid #7a5400;cursor:pointer}
+input[type=number]:focus{border-color:var(--amber);box-shadow:0 0 0 3px rgba(217,165,33,.25)}
+.opts button{transition:border-color .2s,transform .2s,background .2s}
+.opts button:hover{border-color:var(--amber);transform:translateX(4px)}
+.bar{box-shadow:0 10px 22px -12px rgba(6,38,26,.55)}
+.bar div+div{border-left:2px solid var(--surf)}
+.card{background-image:linear-gradient(180deg,rgba(217,165,33,.07),transparent 45%)}
+::selection{background:#d9a521;color:#10241b}
+.fc{position:absolute;bottom:-40px;left:var(--x);width:var(--s);height:var(--s);border-radius:50%;background:radial-gradient(circle at 30% 28%,#fff3c2,#e0b030 55%,#9a6f10);opacity:0;animation:fl var(--d) linear var(--l) infinite;pointer-events:none}
+@keyframes fl{0%{transform:translateY(0) rotate(0);opacity:0}10%{opacity:.55}90%{opacity:.3}100%{transform:translateY(-680px) rotate(360deg);opacity:0}}
+.jar::before{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(115deg,rgba(255,255,255,.1),transparent 38%);pointer-events:none}
+.card h3::before{content:"\25c6";color:var(--amber);font-size:.55em;margin-right:10px;vertical-align:middle}
+.tool{border-top:3px solid var(--amber)}
+.st i{transform-origin:left;transform:scaleX(0);transition:transform 1.1s cubic-bezier(.2,.7,.2,1)}
+.sq.in .st i,.noio .st i{transform:scaleX(1)}
+.fin{position:relative;overflow:hidden}
+.fin::before{content:"";position:absolute;inset:0;background:repeating-radial-gradient(circle at 50% 130%,transparent 0 11px,rgba(227,179,65,.07) 11px 12px);pointer-events:none}
+.fin .wrap{position:relative;border:1px solid rgba(217,165,33,.55);outline:1px solid rgba(217,165,33,.25);outline-offset:8px;border-radius:4px;padding:64px 28px}
+footer h3{font-size:1.6rem}
+@media (prefers-reduced-motion:reduce){.fc{display:none}.st i{transform:none;transition:none}}
+@property --a{syntax:"<angle>";initial-value:0deg;inherits:false}
+@keyframes rot{to{--a:360deg}}
+.jar::after{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:2px;background:conic-gradient(from var(--a),transparent 0 72%,#f6dc8e 88%,transparent 100%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);animation:rot 7s linear infinite;pointer-events:none}
+main section:nth-of-type(odd):not(.fin){background-image:radial-gradient(circle at 100% 0,rgba(217,165,33,.1),transparent 45%)}
+main section:nth-of-type(even):not(.fin){background-image:radial-gradient(circle at 0 100%,rgba(47,158,104,.09),transparent 45%)}
+.stat{font-size:2.3rem;line-height:1.1;margin-bottom:10px}
+.cta{position:relative;overflow:hidden}
+.cta::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.6),transparent);transform:skewX(-20deg);transition:left .7s}
+.cta:hover::after{left:130%}
+.num b{text-shadow:0 0 40px rgba(217,165,33,.25)}
+@media (prefers-reduced-motion:reduce){.jar::after{animation:none}}
+.ic{width:36px;height:36px;stroke:#b8861c;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;display:block;margin-bottom:14px}
+.card h3::before{display:none}
+.stack{display:flex;flex-direction:column-reverse;align-items:center;height:156px;justify-content:flex-start;margin:12px 0 10px}
+.stack i{display:block;width:92px;height:17px;margin-bottom:-8px;border-radius:50%;background:linear-gradient(180deg,#f6dc8e,#d9a521 55%,#9a6f10);box-shadow:0 2px 0 #7a5400,inset 0 1px 0 rgba(255,255,255,.55);animation:drop .5s cubic-bezier(.3,1.4,.5,1)}
+.stack i:nth-child(3n){transform:translateX(4px)}.stack i:nth-child(4n){transform:translateX(-4px)}
+@keyframes drop{from{transform:translateY(-70px);opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.stack i{animation:none}}
+</style>
+</head>
+<body>
+<div id="pb"></div>
+<nav><div class="wrap"><span class="brand">Орлов Иван</span><a href="#about">О проекте</a><a href="#problem">Проблема</a><a href="#causes">Причины</a><a href="#survey">Опросы</a><a href="#stages">Этапы</a><a href="#budget">Бюджет</a><a href="#goal">Цель</a><a href="#grow">Рост денег</a><a href="#quiz">Тест</a><a href="#fraud">Мошенники</a><a href="#myths">Мифы</a><a href="#fix">Что делать</a><a href="#type">Твой тип</a><a href="#week">Чек-лист</a><a href="#gloss">Словарь</a><a href="#faq">Защита</a><a href="#end">Вывод</a><a href="#sources">Источники</a><button id="th" class="tg" aria-label="Сменить тему">◐</button></div></nav>
+
+<header class="hero"><i class="fc" style="--s:16px;--x:6%;--d:15s;--l:-0s"></i><i class="fc" style="--s:26px;--x:18%;--d:19s;--l:-6s"></i><i class="fc" style="--s:12px;--x:32%;--d:13s;--l:-3s"></i><i class="fc" style="--s:22px;--x:46%;--d:17s;--l:-9s"></i><i class="fc" style="--s:14px;--x:58%;--d:14s;--l:-1s"></i><i class="fc" style="--s:30px;--x:72%;--d:21s;--l:-12s"></i><i class="fc" style="--s:18px;--x:84%;--d:16s;--l:-5s"></i><i class="fc" style="--s:12px;--x:94%;--d:12s;--l:-8s"></i>
+<div class="wrap">
+<div>
+<h1>Почему подростки не умеют распоряжаться своими финансами и как это исправить?</h1>
+<p>Индивидуальный проект об умении планировать, копить и не попадаться на уловки. Здесь можно самому попробовать то, о чём написано в работе.</p><div class="acts"><a class="cta" href="#budget">Составить бюджет</a><a class="ghost" href="#quiz">Пройти тест</a></div>
+<div class="meta"><span><b>Автор:</b> Орлов Иван</span><span><b>Класс:</b> 10 «Г»</span><span><b>Школа:</b> № 1500, Россия</span></div>
+</div>
+<div class="jar" aria-label="Калькулятор накоплений"><div class="coin" aria-hidden="true">₽</div>
+<label>Откладываю в месяц: <output id="hm">1 000 ₽</output></label>
+<input id="hmi" type="range" min="200" max="10000" step="100" value="1000" aria-label="Сумма в месяц">
+<label>Срок: <output id="hy">5 лет</output></label>
+<input id="hyi" type="range" min="1" max="10" value="5" aria-label="Срок в годах">
+<div class="big" id="hres">0 ₽</div>
+<div class="stack" id="stk" aria-hidden="true"></div>
+<small style="color:#c3d6cf">накопится при ставке 10% годовых с ежемесячной капитализацией</small>
+</div>
+</div>
+</header>
+<div class="tick" aria-hidden="true"><div><span>Бюджет</span><span>Накопления</span><span>Сложный процент</span><span>Инфляция</span><span>Финансовая подушка</span><span>Цель и срок</span><span>Диверсификация</span><span>Кредит</span><span>Бюджет</span><span>Накопления</span><span>Сложный процент</span><span>Инфляция</span><span>Финансовая подушка</span><span>Цель и срок</span><span>Диверсификация</span><span>Кредит</span></div></div>
+
+<div class="nums"><div class="wrap">
+<div class="num"><b data-n="66">66</b><span>школьников стараются откладывать часть денег</span><small>опрос «Умскула»</small></div>
+<div class="num"><b data-n="28">28</b><span>подростков систематически копят на конкретную вещь</span><small>исследование Альфа-Денег</small></div>
+<div class="num"><b data-n="77">77</b><span>родителей объясняют детям основы финансов</span><small>исследование «СберНПФ»</small></div>
+</div></div>
+<main>
+<section id="about"><div class="wrap">
+<h2>О проекте</h2>
+<div class="grid">
+<div class="card hl"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></svg><h3>Цель</h3><p>Выяснить, почему подросткам трудно управлять деньгами, и предложить понятные способы научиться этому.</p></div>
+<div class="card hl"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2"/></svg><h3>Задачи</h3><p>Изучить причины, разобрать типичные ошибки, создать интерактивные инструменты, дать практические рекомендации.</p></div>
+<div class="card hl"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3z"/></svg><h3>Гипотеза</h3><p>Навык управления деньгами формируется практикой с реальными суммами лучше, чем чтением теории.</p></div>
+<div class="card hl"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg><h3>Продукт</h3><p>Этот сайт: калькуляторы, тест и пошаговый план для школьника.</p></div>
+</div></div></section>
+
+<section id="problem"><div class="wrap">
+<h2>В чём проблема</h2>
+<p class="lead">Подросток получает деньги раньше, чем получает навык ими управлять: карманные расходы, подарки, первые подработки, покупки в играх и приложениях. Школа даёт теорию, но привычки формируются в реальных ситуациях, где никто не объясняет, как принимать решения.</p>
+<div class="grid" style="margin-top:28px">
+<div class="card"><span class="stat">Нет плана</span><p>Деньги тратятся по настроению. Конец месяца наступает раньше, чем кончаются желания.</p></div>
+<div class="card"><span class="stat">Нет цели</span><p>Без конкретной цели копить скучно и непонятно зачем. Накопления не доживают до покупки. По опросу Альфа-Денег, систематически откладывают на конкретную вещь только 28% подростков.</p></div>
+<div class="card"><span class="stat">Нет знаний</span><p>Проценты, инфляция, кредит и риск остаются абстрактными словами до первой ошибки.</p></div>
+</div>
+<p class="note">Цифры по теме смотрите в разделе <a href="#survey">с опросами</a>: у каждого исследования указан источник.</p>
+</div></section>
+
+<section id="causes"><div class="wrap">
+<h2>Почему так происходит</h2>
+<div class="grid" style="margin-top:24px">
+<div class="card"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg><h3>Деньги стали невидимыми</h3><p>Оплата картой и телефоном не ощущается как расставание с деньгами. Наличные давали физическое чувство траты.</p></div>
+<div class="card"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h3l8 4V6L7 10H4a1 1 0 0 0-1 1zM19 9a4 4 0 0 1 0 6"/></svg><h3>Реклама и соцсети</h3><p>Блогеры и подписки на сервисы создают ощущение, что «все это покупают». Срабатывает страх что-то упустить.</p></div>
+<div class="card"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg><h3>Дома о деньгах молчат</h3><p>Многие семьи не обсуждают бюджет с детьми, и подростки не видят, как принимаются финансовые решения.</p></div>
+<div class="card"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l4-1L19 8l-3-3L5 16zM14 7l3 3"/></svg><h3>Мало практики</h3><p>Финансовая грамотность изучается в формате лекций. Но навык появляется, когда человек сам распределяет реальную сумму.</p></div>
+<div class="card"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><h3>Мышление «здесь и сейчас»</h3><p>Мозг подростка склонен ценить немедленное вознаграждение выше будущего. Это нормально, и с этим можно работать правилами.</p></div>
+<div class="card"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 5L5 19"/><circle cx="7.5" cy="7.5" r="2"/><circle cx="16.5" cy="16.5" r="2"/></svg><h3>Лёгкие кредиты и «рассрочки»</h3><p>«Купи сейчас, плати потом» скрывает реальную цену покупки и приучает жить в долг.</p></div>
+</div>
+</div></section>
+
+<section id="survey"><div class="wrap">
+<h2>Что показывают опросы школьников и родителей</h2>
+<p class="lead">Данные из опубликованных опросов российских школьников и их родителей. У каждого блока указан источник. Выборки у исследований разные, поэтому цифры из разных блоков нельзя напрямую сравнивать.</p>
+<div class="tool" id="sv"></div>
+</div></section>
+
+<section id="why"><div class="wrap">
+<h2>Почему тема актуальна</h2>
+<p class="lead">Школьники сталкиваются с деньгами всё раньше: у многих есть своя банковская карта, подписки, покупки в играх и первые подработки. При этом большинство вещей, связанных с кредитами, налогами и накоплениями, ждёт их уже после 18 лет. Ошибки, сделанные в начале взрослой жизни, стоят дорого, а привычки, сформированные в подростковом возрасте, остаются надолго.</p>
+<div class="grid" style="margin-top:24px">
+<div class="card"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><h3>Личный уровень</h3><p>Умение планировать расходы снижает стресс и даёт чувство контроля над собственной жизнью.</p></div>
+<div class="card"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-8 9 8M5 10v10h14V10M10 20v-6h4v6"/></svg><h3>Уровень семьи</h3><p>Финансово грамотный человек реже попадает в долги и лучше принимает решения о обучении, жилье и семье.</p></div>
+<div class="card"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10l9-6 9 6M5 10v8M9 10v8M15 10v8M19 10v8M3 21h18"/></svg><h3>Уровень страны</h3><p>Развитие финансовой грамотности населения — задача государственного уровня: ей занимается Банк России и Минфин.</p></div>
+</div></div></section>
+
+<section id="stages"><div class="wrap">
+<h2>Этапы работы над проектом</h2>
+<ol class="steps" style="margin-top:24px">
+<li><div><b>Выбор темы и постановка цели</b><span>Определил проблему, сформулировал цель, задачи и гипотезу.</span></div></li>
+<li><div><b>Изучение источников</b><span>Разобрал материалы Банка России, проекта «Финансовая культура», учебные пособия и научно-популярные статьи.</span></div></li>
+<li><div><b>Анализ опубликованных опросов</b><span>Собрал данные российских исследований о том, как школьники тратят и копят деньги, и сравнил их с рекомендациями.</span></div></li>
+<li><div><b>Анализ и выводы</b><span>Сравнение ответов с теорией, выявление главных причин проблемы.</span></div></li>
+<li><div><b>Создание продукта</b><span>Разработал этот сайт с интерактивными инструментами, которыми можно пользоваться самостоятельно.</span></div></li>
+<li><div><b>Защита проекта</b><span>Презентация результатов и ответы на вопросы комиссии.</span></div></li>
+</ol>
+</div></section>
+
+<section id="budget"><div class="wrap">
+<h2>Попробуй: распредели бюджет</h2>
+<p class="lead">Классическое правило 50/30/20: половина на нужное, треть на желания, остальное в накопления. Введи свою сумму и подвинь ползунки.</p>
+<div class="tool">
+<div class="row">
+<div><label for="inc">Деньги в месяц, ₽</label><input id="inc" type="number" min="0" value="5000"></div>
+<div><label for="need">Нужное (проезд, еда, связь): <output id="needo">50%</output></label><input id="need" type="range" min="0" max="100" value="50"></div>
+<div><label for="want">Желания (кафе, игры, одежда): <output id="wanto">30%</output></label><input id="want" type="range" min="0" max="100" value="30"></div>
+</div>
+<div class="bar" id="bar" role="img" aria-label="Распределение бюджета"><div class="n" id="bn" style="flex-grow:50">50%</div><div class="w" id="bw" style="flex-grow:30">30%</div><div class="s" id="bs" style="flex-grow:20">20%</div></div>
+<div class="legend"><div><b id="ln">2 500 ₽</b>нужное</div><div><b id="lw">1 500 ₽</b>желания</div><div><b id="ls">1 000 ₽</b>накопления</div></div>
+<p class="exp" id="bmsg"></p>
+</div>
+</div></section>
+
+<section id="goal"><div class="wrap">
+<h2>Планировщик цели</h2>
+<p class="lead">Хочешь что-то купить? Узнай, сколько нужно откладывать, чтобы успеть к сроку.</p>
+<div class="tool"><div class="row">
+<div><label for="gp">Стоимость цели, ₽</label><input id="gp" type="number" min="0" value="24000"></div>
+<div><label for="gs">Уже накоплено, ₽</label><input id="gs" type="number" min="0" value="3000"></div>
+<div><label for="gt">Срок, месяцев</label><input id="gt" type="number" min="1" value="6"></div>
+</div>
+<p class="exp" style="margin-top:22px">Откладывать в месяц:</p><div class="out" id="go"></div><p class="exp" id="gd"></p>
+</div></div></section>
+
+<section id="grow"><div class="wrap">
+<h2>Как растут накопления</h2>
+<p class="lead">Сложный процент работает на тех, кто начинает рано. Серая часть графика показывает, сколько ты внёс сам, жёлтая — сколько добавили проценты.</p>
+<div class="tool" style="background:var(--bg)">
+<div class="row">
+<div><label>Вносить в месяц: <output id="gm">2 000 ₽</output></label><input id="gmi" type="range" min="500" max="20000" step="100" value="2000"></div>
+<div><label>Ставка в год: <output id="gr">10%</output></label><input id="gri" type="range" min="1" max="20" value="10"></div>
+<div><label>Лет: <output id="gy">8</output></label><input id="gyi" type="range" min="1" max="20" value="8"></div>
+</div>
+<svg class="chart" id="chart" viewBox="0 0 640 260" role="img" aria-label="График роста накоплений"></svg>
+<p class="exp" id="gmsg"></p>
+</div>
+</div></section>
+
+<section id="quiz"><div class="wrap">
+<h2>Проверь себя</h2>
+<div class="tool"><p class="q" id="qq"></p><div class="opts" id="qo"></div><p class="exp" id="qe"></p><button class="btn" id="qn" hidden>Дальше</button></div>
+</div></section>
+
+<section id="mistakes"><div class="wrap">
+<h2>Пять частых ошибок и как их исправить</h2>
+<div class="grid" style="margin-top:24px">
+<div class="card"><span class="stat" style="font-size:1.05rem">Ошибка</span><p>Тратить всё сразу после получения денег.</p><p style="margin-top:10px;color:var(--ink)"><b>Решение:</b> сначала отложить свою долю, потом тратить остаток.</p></div>
+<div class="card"><span class="stat" style="font-size:1.05rem">Ошибка</span><p>Покупать за компанию и ради впечатления.</p><p style="margin-top:10px;color:var(--ink)"><b>Решение:</b> задать вопрос «нужно ли это мне, если никто не увидит?».</p></div>
+<div class="card"><span class="stat" style="font-size:1.05rem">Ошибка</span><p>Забывать про мелкие регулярные платежи и подписки.</p><p style="margin-top:10px;color:var(--ink)"><b>Решение:</b> раз в месяц пересматривать список подписок и отключать лишнее.</p></div>
+<div class="card"><span class="stat" style="font-size:1.05rem">Ошибка</span><p>Занимать у друзей «до завтра» и не отдавать вовремя.</p><p style="margin-top:10px;color:var(--ink)"><b>Решение:</b> занимать только малые суммы, записывать долг и срок возврата.</p></div>
+<div class="card"><span class="stat" style="font-size:1.05rem">Ошибка</span><p>Копить без цели и срока.</p><p style="margin-top:10px;color:var(--ink)"><b>Решение:</b> назвать цель, сумму и дату, разделить сумму на месяцы.</p></div>
+</div></div></section>
+
+<section id="fraud"><div class="wrap">
+<h2>Финансовая безопасность</h2>
+<p class="lead">Мошенники часто выбирают подростков: им проще предложить «лёгкий заработок», «розыгрыш» или «помощь с банковской картой». Запомни правила, которые работают всегда.</p>
+<div class="grid" style="margin-top:24px">
+<div class="card hl"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><h3>Никому не сообщай коды</h3><p>Код из СМС, пароль, срок действия карты и три цифры на обороте нужны только мошенникам. Настоящий сотрудник банка их не спросит.</p></div>
+<div class="card hl"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l10 18H2z"/><path d="M12 10v4M12 17.5v.01"/></svg><h3>Спешка — сигнал опасности</h3><p>«Срочно», «последний шанс», «деньги украдут через минуту» — приём, чтобы ты не успел подумать. Остановись и перезвони в банк сам по номеру на карте.</p></div>
+<div class="card hl"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.5c0-1 1-1.5 2.5-1.5s2.5.7 2.5 1.8-1 1.5-2.5 1.7-2.5.7-2.5 1.8 1 1.7 2.5 1.7 2.5-.5 2.5-1.5"/></svg><h3>«Лёгкий заработок» не бывает</h3><p>Предложения перевести деньги, чтобы получить больше, или стать «курьером» и «дропом» ведут к потере денег и даже проблемам с законом.</p></div>
+<div class="card hl"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></svg><h3>Расскажи взрослым</h3><p>Если сомневаешься или уже отдал данные, сразу скажи родителям и позвони в банк. Чем быстрее, тем выше шанс остановить операцию.</p></div>
+</div></div></section>
+
+<section id="myths"><div class="wrap">
+<h2>Пять мифов о деньгах</h2>
+<p class="lead">Нажми на утверждение, чтобы увидеть, что с ним не так.</p>
+<div class="myths">
+<details><summary>«Мне мало дают, копить нечего»</summary><p>Привычка важнее суммы. Если откладывать даже 10% от маленьких поступлений, навык сформируется к моменту, когда денег станет больше.</p></details>
+<details><summary>«Деньги надо тратить, пока они есть»</summary><p>Деньги без плана заканчиваются быстро и без пользы. План не запрещает траты, он помогает выбрать самые важные.</p></details>
+<details><summary>«Инвестиции только для богатых»</summary><p>Начинать можно с малых сумм, но сначала нужна подушка безопасности и понимание рисков. Инвестиции не гарантируют доход.</p></details>
+<details><summary>«Скидка — это всегда экономия»</summary><p>Если вещь тебе не нужна, любая скидка превращается в трату. Экономия возникает, когда ты покупаешь запланированное дешевле.</p></details>
+<details><summary>«Финансовая грамотность — это скучно»</summary><p>Это умение получать то, что хочешь, и не зависеть от чужих решений. Попробуй калькулятор выше: цифры быстро становятся личными.</p></details>
+</div></div></section>
+
+<section id="fix"><div class="wrap">
+<h2>Как это исправить</h2>
+<p class="lead">Решения работают, когда они простые и повторяются каждый месяц.</p>
+<ol class="steps" style="margin-top:24px">
+<li><div><b>Записывай траты две недели</b><span>В заметках или приложении. Само наблюдение уже меняет поведение.</span></div></li>
+<li><div><b>Поставь конкретную цель</b><span>Не «накопить», а «12 000 ₽ на наушники к марту». Цель с суммой и сроком.</span></div></li>
+<li><div><b>Плати себе первым</b><span>С любого поступления сразу откладывай часть, пока деньги не потрачены.</span></div></li>
+<li><div><b>Подожди 48 часов перед покупкой</b><span>Если желание не прошло, покупай. Большинство импульсных трат за это время отпадает.</span></div></li>
+<li><div><b>Учись у реальных инструментов</b><span>Детская карта с лимитом, накопительный счёт, разговор с родителями о семейном бюджете.</span></div></li>
+<li><div><b>Школе добавить практику</b><span>Уроки-симуляции: бюджет на месяц, расчёт кредита, проекты по сбору средств на общую цель класса.</span></div></li>
+</ol>
+</div></section>
+
+<section id="type"><div class="wrap">
+<h2>Какой у тебя финансовый тип</h2>
+<p class="lead">Пять вопросов без правильных ответов. В конце получишь портрет и совет.</p>
+<div class="tool" style="background:var(--bg)"><p class="q" id="pq"></p><div class="opts" id="po"></div><div id="pr"></div></div>
+</div></section>
+
+<section id="week"><div class="wrap">
+<h2>Чек-лист: финансовая неделя</h2>
+<p class="lead">Отмечай выполненное. Если сделаешь всё, у тебя появится рабочая привычка.</p>
+<div class="tool"><div class="chk">
+<label><input type="checkbox" class="ck"> Записал все траты за день</label>
+<label><input type="checkbox" class="ck"> Отложил часть денег в копилку или на накопительный счёт</label>
+<label><input type="checkbox" class="ck"> Подождал 48 часов перед крупной покупкой</label>
+<label><input type="checkbox" class="ck"> Проверил подписки и отключил ненужные</label>
+<label><input type="checkbox" class="ck"> Обсудил с родителями семейный бюджет или свою цель</label>
+<label><input type="checkbox" class="ck"> Поставил цель с суммой и сроком</label>
+</div>
+<div class="pgs"><div id="pgv"></div></div>
+<p class="exp" id="pgt">Выполнено 0 из 6</p></div>
+</div></section>
+
+<section id="gloss"><div class="wrap">
+<h2>Словарь терминов</h2>
+<div class="myths">
+<details><summary>Бюджет</summary><p>План доходов и расходов на определённый период, обычно на месяц.</p></details>
+<details><summary>Инфляция</summary><p>Рост общего уровня цен. За ту же сумму со временем можно купить меньше товаров.</p></details>
+<details><summary>Сложный процент</summary><p>Начисление процентов не только на вложенную сумму, но и на уже начисленные проценты.</p></details>
+<details><summary>Кредит</summary><p>Деньги, взятые у банка на условиях возврата с процентами. Переплата зависит от ставки и срока.</p></details>
+<details><summary>Диверсификация</summary><p>Распределение денег между разными инструментами, чтобы снизить риск потери из-за одного неудачного решения.</p></details>
+<details><summary>Финансовая подушка</summary><p>Запас денег на непредвиденные расходы. Обычно его считают как несколько месячных расходов.</p></details>
+</div></div></section>
+
+<section id="faq"><div class="wrap">
+<h2>Вопросы к защите</h2>
+<p class="lead">Ответы на вопросы, которые чаще всего задают на защите.</p>
+<div class="myths">
+<details><summary>Почему вы выбрали эту тему?</summary><p>Деньги появляются у подростков раньше, чем навык ими пользоваться. Мне захотелось разобраться, почему так происходит, и сделать инструмент, который помогает потренироваться без риска.</p></details>
+<details><summary>В чём практическая польза проекта?</summary><p>Сайт можно использовать на классных часах и уроках обществознания: калькуляторы, тест и чек-лист позволяют сразу применить знания к своим деньгам.</p></details>
+<details><summary>Как вы проверяли гипотезу?</summary><p>Сравнивая данные опубликованных опросов школьников и родителей с рекомендациями из официальных источников. Результаты показаны в разделе про опросы.</p></details>
+<details><summary>Какие у проекта ограничения?</summary><p>Выборка опроса ограничена одним классом или параллелью, а калькуляторы используют упрощённые модели без налогов и инфляции. Это учебный инструмент, а не финансовая консультация.</p></details>
+<details><summary>Что вы планируете делать дальше?</summary><p>Расширить опрос на другие классы, добавить уроки-симуляции и рассказать о проекте в школе.</p></details>
+</div></div></section>
+
+<section id="end" class="fin"><div class="wrap">
+<h2>Вывод</h2>
+<p>Подростки не умеют управлять деньгами не потому, что не способны, а потому, что их этому не учили на практике. Простые правила (план, цель, пауза перед покупкой, ранние накопления) решают большую часть проблем. Начать можно сегодня, с первой суммы.</p>
+<a class="btn cta" href="#budget">Составить свой бюджет</a>
+</div></section>
+</main>
+
+<footer id="sources"><div class="wrap">
+<h3>Источники и ресурсы</h3>
+<p>Рекомендуем опираться на: сайт Банка России и проект «Финансовая культура» (fincult.info), материалы Минфина России, исследование ОЭСР PISA по финансовой грамотности, учебные материалы Финансового университета. Список литературы оформите по требованиям школы.</p>
+<p>Данные опросов: «Умскул» и «Газета.Ру» (finance.mail.ru), Альфа-Деньги и «Газета.Ру» (finance.mail.ru), «СберНПФ» и Maximum Education (incrussia.ru). Ссылки приведены в разделе с опросами.</p>
+<p>Орлов Иван, 10 «Г», школа № 1500. Материал носит образовательный характер и не является инвестиционной рекомендацией.</p>
+</div></footer>
+
+<script>
+const $=id=>document.getElementById(id),fmt=n=>Math.round(n).toLocaleString('ru-RU')+' ₽';
+const grow=(m,r,y)=>{let s=0,c=[];for(let i=1;i<=y*12;i++){s=s*(1+r/1200)+m;if(i%12==0)c.push([i/12,s,m*i])}return c};
+function hero(){const m=+$('hmi').value,y=+$('hyi').value;$('hm').textContent=fmt(m);$('hy').textContent=y+' '+(y==1?'год':y<5?'года':'лет');const c=grow(m,10,y);const r=c[c.length-1][1],k=Math.max(1,Math.min(14,Math.round((Math.log10(r)-3)/3.3*13)+1)),s=$('stk');$('hres').textContent=fmt(r);while(s.children.length<k)s.appendChild(document.createElement('i'));while(s.children.length>k)s.lastChild.remove()}
+['hmi','hyi'].forEach(i=>$(i).oninput=hero);hero();
+function g(){const m=+$('gmi').value,r=+$('gri').value,y=+$('gyi').value;$('gm').textContent=fmt(m);$('gr').textContent=r+'%';$('gy').textContent=y;
+const c=grow(m,r,y),mx=c[c.length-1][1],w=640/y,bw=Math.min(w*.7,40);let h='';
+c.forEach((p,i)=>{const x=i*w+(w-bw)/2,t=p[1]/mx*220,d=p[2]/mx*220;h+=`<rect x="${x}" y="${240-t}" width="${bw}" height="${t}" fill="url(#gg)" rx="3"/><rect x="${x}" y="${240-d}" width="${bw}" height="${d}" fill="#8aa39b" rx="3"/>`});
+h+=`<text x="0" y="256" font-size="12" fill="currentColor">годы: 1 … ${y}</text>`;$('chart').innerHTML='<defs><linearGradient id="gg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6dc8e"/><stop offset="1" stop-color="#b8861c"/></linearGradient></defs>'+h;
+const tot=c[c.length-1][2];$('gmsg').textContent=`Ты внесёшь ${fmt(tot)}, а накопится ${fmt(mx)}. Проценты добавят ${fmt(mx-tot)}. Расчёт упрощённый: без налогов и инфляции.`}
+['gmi','gri','gyi'].forEach(i=>$(i).oninput=g);g();
+function b(){const inc=+$('inc').value||0;let n=+$('need').value,w=+$('want').value;if(n+w>100){w=100-n;$('want').value=w}const s=100-n-w;
+$('needo').textContent=n+'%';$('wanto').textContent=w+'%';
+[['bn',n],['bw',w],['bs',s]].forEach(([i,v])=>{$(i).style.flexGrow=Math.max(v,.001);$(i).textContent=v>6?v+'%':''});
+$('ln').textContent=fmt(inc*n/100);$('lw').textContent=fmt(inc*w/100);$('ls').textContent=fmt(inc*s/100);
+$('bmsg').textContent=s>=20?`Хороший план: за год откладывается ${fmt(inc*s/100*12)}.`:s>0?`В накопления идёт ${s}%. Попробуй довести до 20%, уменьшив желания.`:'Накоплений нет. Любая непредвиденная трата станет проблемой.'}
+['inc','need','want'].forEach(i=>$(i).oninput=b);b();
+const Q=[
+['Что такое инфляция?','Рост цен и снижение покупательной способности денег',['Рост цен и снижение покупательной способности денег','Рост курса доллара','Увеличение зарплат'],'Если цены растут быстрее, чем доход по вкладу, деньги теряют ценность.'],
+['Сколько рекомендуется откладывать по правилу 50/30/20?','20%',['5%','20%','50%'],'20% дохода в накопления — разумная точка отсчёта.'],
+['Что выгоднее при сложном проценте?','Начать копить раньше',['Копить больше, но позже','Начать копить раньше','Нет разницы'],'Время — главный множитель. Проценты начисляются на уже начисленные проценты.'],
+['Рассрочка «без переплаты» — это...','Способ продать товар, цена которого может включать скрытые расходы',['Бесплатные деньги','Способ продать товар, цена которого может включать скрытые расходы','Подарок от магазина'],'Всегда сравнивай цену с рассрочкой и без неё, читай договор.'],
+['Что делать с внезапным желанием купить дорогую вещь?','Подождать 48 часов',['Купить сразу, пока скидка','Подождать 48 часов','Взять в долг у друга'],'Пауза отсекает импульсные покупки.'],
+['Что такое финансовая подушка?','Запас денег на непредвиденные расходы',['Кредитная карта с большим лимитом','Запас денег на непредвиденные расходы','Вклад на 10 лет без права снятия'],'Обычно её считают как несколько месячных расходов. Она выручает, когда что-то ломается или заканчиваются поступления.'],
+['Что такое сложный процент?','Проценты начисляются и на уже начисленные проценты',['Проценты начисляются только на первую сумму','Проценты, которые сложно посчитать','Проценты начисляются и на уже начисленные проценты'],'Поэтому деньги растут всё быстрее, особенно на длинных сроках. Это видно на графике выше.'],
+['Кому можно сообщить код из СМС от банка?','Никому',['Сотруднику банка по телефону','Другу, который помогает с покупкой','Никому'],'Код и данные карты нужны только мошенникам. Настоящий сотрудник банка их не спрашивает.'],
+['Что сильнее всего помогает выработать привычку копить?','Регулярные небольшие взносы',['Одна большая сумма раз в год','Регулярные небольшие взносы','Копить только остаток в конце месяца'],'Остаток чаще всего оказывается нулевым. Лучше отложить долю сразу, как пришли деньги.'],
+['Как рассчитать, сколько откладывать в месяц на цель?','Разделить недостающую сумму на число месяцев',['Разделить недостающую сумму на число месяцев','Умножить цену на число месяцев','Откладывать, сколько останется'],'Проверь себя в планировщике цели на этой странице.'],
+['Какой расход относится к «нужному» в правиле 50/30/20?','Проезд до школы',['Новая игровая подписка','Поход в кафе с друзьями','Проезд до школы'],'К нужному относятся то, без чего не обойтись: проезд, еда, связь. Остальное — желания.'],
+['Цены растут на 8% в год, а вклад приносит 5%. Что со стоимостью денег?','Она снижается',['Она растёт','Она не меняется','Она снижается'],'Если доходность ниже инфляции, на те же деньги со временем можно купить меньше. Упрощённо, без учёта налогов.'],
+['Что похоже на признак мошенничества?','Просят срочно перевести деньги и никому не говорить',['Банк присылает уведомление о списании','Магазин отправляет чек на почту','Просят срочно перевести деньги и никому не говорить'],'Спешка и просьба молчать — сигнал остановиться и позвонить в банк самому.'],
+['Что такое бюджет?','План доходов и расходов на период',['Сумма всех накоплений','План доходов и расходов на период','Банковская карта для покупок'],'Бюджет помогает заранее решить, куда пойдут деньги, а не искать их в конце месяца.'],
+['Что лучше сделать, если захотелось купить ещё одну вещь, а цель не достигнута?','Сверить покупку с целью и подождать',['Купить, а на цель накопить потом','Сверить покупку с целью и подождать','Взять в рассрочку'],'Если покупка не приближает к цели, она её отодвигает. Пауза помогает это увидеть.']];
+let qi=0,sc=0,done=false;
+function showQ(){done=false;const q=Q[qi];$('qq').textContent=`Вопрос ${qi+1} из ${Q.length}: ${q[0]}`;$('qe').textContent='';$('qn').hidden=true;
+$('qo').innerHTML='';q[2].forEach(o=>{const bt=document.createElement('button');bt.textContent=o;bt.onclick=()=>{if(done)return;done=true;const ok=o===q[1];if(ok)sc++;bt.className=ok?'ok':'bad';[...$('qo').children].forEach(x=>{if(x.textContent===q[1])x.className='ok'});$('qe').textContent=(ok?'Верно. ':'Не совсем. ')+q[3];$('qn').hidden=false;$('qn').textContent=qi<Q.length-1?'Дальше':'Узнать результат'};$('qo').appendChild(bt)})}
+const nextQ=()=>{if(qi<Q.length-1){qi++;showQ()}else{$('qq').textContent=`Результат: ${sc} из ${Q.length}`;$('qo').innerHTML='';$('qe').textContent=sc/Q.length>=.8?'Отличная база. Время переходить к практике.':sc/Q.length>=.5?'Неплохо. Вернись к разделам выше и закрой пробелы.':'Есть что прокачать. Вернись к разделам выше и попробуй снова.';$('qn').textContent='Пройти заново';$('qn').onclick=()=>{qi=0;sc=0;$('qn').onclick=nextQ;showQ()}}};
+$('qn').onclick=nextQ;
+showQ();
+addEventListener('scroll',()=>{const d=document.documentElement;$('pb').style.width=(scrollY/(d.scrollHeight-innerHeight)*100)+'%'},{passive:true});
+$('th').onclick=()=>{const r=document.documentElement,dark=getComputedStyle(r).colorScheme==='dark';r.setAttribute('data-theme',dark?'light':'dark')};
+const cks=[...document.querySelectorAll('.ck')];cks.forEach(c=>c.onchange=()=>{const k=cks.filter(x=>x.checked).length;$('pgv').style.width=k/cks.length*100+'%';$('pgt').textContent=`Выполнено ${k} из ${cks.length}`+(k==cks.length?'. Отличная неделя!':'')});
+document.querySelectorAll('.card').forEach(c=>c.addEventListener('pointermove',e=>{const r=c.getBoundingClientRect();c.style.setProperty('--mx',e.clientX-r.left+'px');c.style.setProperty('--my',e.clientY-r.top+'px')}));
+if('IntersectionObserver' in window&&!matchMedia('(prefers-reduced-motion:reduce)').matches){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');e.target.addEventListener('transitionend',()=>e.target.style.transitionDelay='',{once:true});io.unobserve(e.target)}}),{threshold:.1});document.querySelectorAll('.card,.steps li,.tool').forEach((el,i)=>{el.classList.add('rv');el.style.transitionDelay=(i%3)*90+'ms';io.observe(el)})}
+const SURVEY=[{q:'Как школьники распоряжаются деньгами',src:'Опрос онлайн-школы «Умскул» для «Газеты.Ру», школьники',url:'https://finance.mail.ru/article/kazhdyj-pyatyj-shkolnik-v-rossii-zarabatyvaet-dengi-samostoyatelno-69209381/',a:[['Получают деньги от родителей и родственников',87],['Стараются откладывать часть денег',66],['Больше всего тратят на еду и кафе',66],['Тратят импульсивно, не задумываясь',9]]},{q:'Что говорят родители подростков 14–18 лет',src:'Исследование Альфа-Денег, по публикации «Газеты.Ру»',url:'https://finance.mail.ru/article/raskryto-skolko-rossijskih-podrostkov-uzhe-zarabatyvayut-sami-69224929/',a:[['Копят на конкретную вещь систематически',28],['Живут без чёткой финансовой цели',72],['Родители лишь эпизодически обсуждают покупки с ребёнком',48],['Подросток полностью сам распоряжается деньгами',19]]},{q:'Карманные деньги и финансовая грамотность в семьях',src:'Исследование «СберНПФ» и Maximum Education, 1,5 тыс. родителей школьников 5–11 классов',url:'https://incrussia.ru/news/rossiyane-nazvali-samye-krupnye-traty-na-podrostkov-v-tope-obrazovanie-i-odezhda/',a:[['Регулярно дают детям карманные деньги',85],['Объясняют детям основы финансовой грамотности',77],['Дети формируют сбережения из карманных денег',63]]}];
+$('sv').innerHTML=SURVEY.map(s=>`<div class="sq"><b>${s.q}</b><p class="src">Источник: <a href="${s.url}" target="_blank" rel="noopener">${s.src}</a></p>${s.a.map(([t,v])=>`<div class="sr"><span>${t}</span><div class="st"><i style="width:${v}%"></i></div><em>${v}%</em></div>`).join('')}</div>`).join('');
+function gl(){const p=+$('gp').value||0,s=+$('gs').value||0,t=Math.max(+$('gt').value||1,1),n=Math.max(p-s,0),m=n/t;$('go').textContent=fmt(m);$('gd').textContent=n==0?'Цель уже достигнута.':`Это примерно ${fmt(m/30)} в день. Осталось собрать ${fmt(n)} за ${t} мес.`}
+['gp','gs','gt'].forEach(i=>$(i).oninput=gl);gl();
+const PQ=[['Тебе дали деньги. Что делаешь?',['Трачу сразу','Часть откладываю, если вспомню','Сразу откладываю долю и планирую остальное']],['Хочется дорогую вещь.',['Покупаю сразу','Жду пару дней','Откладываю на неё по плану']],['Знаешь, сколько потратил за неделю?',['Нет','Примерно','Да, записываю']],['Друзья зовут в кафе, а бюджет закончился.',['Иду и беру в долг','Иду, но потом жалею','Предлагаю другой формат или отказываюсь']],['Что для тебя накопления?',['Скука','Запас на всякий случай','Инструмент для целей']]];
+const PT=[['Спонтанный транжира','Ты живёшь здесь и сейчас, и это нормально. Начни с малого: две недели записывай траты и откладывай хотя бы 10% с каждого поступления.'],['Растущий планировщик','База уже есть. Осталось сделать правила автоматическими: накопления в день поступления денег и конкретная цель со сроком.'],['Финансовый стратег','У тебя сильные привычки. Следующий шаг: подушка безопасности и знакомство с инфляцией, вкладами и рисками.']];
+let pi=0,ps=0;function pq(){if(pi>=PQ.length){const r=PT[ps<=3?0:ps<=7?1:2];$('pq').textContent='Твой портрет';$('po').innerHTML='';$('pr').innerHTML=`<div class="res"><h3>${r[0]}</h3><p>${r[1]}</p><p>Баллы: ${ps} из ${PQ.length*2}</p></div><button class="btn" id="pa">Пройти заново</button>`;$('pa').onclick=()=>{pi=0;ps=0;$('pr').innerHTML='';pq()};return}
+$('pq').textContent=`${pi+1} из ${PQ.length}. ${PQ[pi][0]}`;$('po').innerHTML='';PQ[pi][1].forEach((o,k)=>{const b=document.createElement('button');b.textContent=o;b.onclick=()=>{ps+=k;pi++;pq()};$('po').appendChild(b)})}
+pq();
+const tp=document.createElement('button');tp.id='tp';tp.setAttribute('aria-label','Наверх');tp.textContent='↑';tp.onclick=()=>scrollTo({top:0,behavior:'smooth'});document.body.appendChild(tp);
+const secs=[...document.querySelectorAll('main section')],lks=[...document.querySelectorAll('nav a')];
+addEventListener('scroll',()=>{tp.classList.toggle('on',scrollY>700);let cur='';secs.forEach(s=>{if(s.getBoundingClientRect().top<160)cur=s.id});lks.forEach(a=>a.classList.toggle('act',a.getAttribute('href')==='#'+cur))},{passive:true});
+document.querySelectorAll('.num b').forEach(b=>{const t=+b.dataset.n;if(matchMedia('(prefers-reduced-motion:reduce)').matches||!('IntersectionObserver' in window))return;b.textContent='0';new IntersectionObserver((es,o)=>{if(es[0].isIntersecting){o.disconnect();const s=performance.now(),f=n=>{const p=Math.min((n-s)/1400,1);b.textContent=Math.round(t*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(f)};requestAnimationFrame(f)}}).observe(b)});
+if('IntersectionObserver' in window){const so=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');so.unobserve(e.target)}}),{threshold:.25});document.querySelectorAll('.sq').forEach(el=>so.observe(el))}else document.body.classList.add('noio');
+</script>
+</body>
+</html>
